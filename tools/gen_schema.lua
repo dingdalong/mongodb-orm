@@ -304,13 +304,15 @@ for name, fields in sort_pairs(schema_define) do
             end
         elseif tp_name == "array" then
             local field_type = typename(field.item)
-            arrs[field_type] = true
-            local obj_name = sformat("arr_%s", field_type)
-            assert(obj_names[obj_name] == nil, sformat("obj name duplicate <%s>", obj_name))
-            obj_names[obj_name] = true
-            tinsert(bodys, interp(tmpl_arr, { value_type = field_type }))
-            tinsert(defines, sformat('local arr_%s = { type = "array" }', field_type))
-            tinsert(returns, sformat("    arr_%s = arr_%s,", field_type, field_type))
+            if not arrs[field_type] then
+                arrs[field_type] = true
+                local obj_name = sformat("arr_%s", field_type)
+                assert(obj_names[obj_name] == nil, sformat("obj name duplicate <%s>", obj_name))
+                obj_names[obj_name] = true
+                tinsert(bodys, interp(tmpl_arr, { value_type = field_type }))
+                tinsert(defines, sformat('local arr_%s = { type = "array" }', field_type))
+                tinsert(returns, sformat("    arr_%s = arr_%s,", field_type, field_type))
+            end
         end
 
         local field_type = typename(tp_name)

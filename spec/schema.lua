@@ -39,7 +39,7 @@ local boolean = setmetatable({
 
 local function _parse_k_tp(k, need_tp)
     if need_tp == integer then
-        nk = tointeger(k)
+        local nk = tointeger(k)
         if tointeger(k) == nil then
             error(sformat("not equal k type. need integer, real: %s, k: %s, need_tp: %s", type(k), tostring(k), tostring(need_tp)))
         end
